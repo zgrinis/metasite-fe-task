@@ -1,23 +1,16 @@
-import React from "react";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardMedia,
   Container,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Skeleton,
-  TextField,
   Typography,
 } from "@mui/material";
-import CheckboxSecondary from "../../components/CheckboxSecondary/CheckboxSecondary";
 import DataGridContacts from "../../components/DataGridContacts/DataGridContacts";
 import { useContactContext } from "../../contexts/contact";
+import Filters from "../../components/FIlters/Filters";
 
 export function Home() {
   const { contact, contactId, isContactLoading } = useContactContext();
@@ -38,27 +31,7 @@ export function Home() {
       </Box>
       <Box bgcolor="primary.main" pt={6} pb={10}>
         <Container>
-          <Grid container spacing={2}>
-            <Grid size={3}>
-              <TextField fullWidth variant="outlined" label="Name" />
-            </Grid>
-            <Grid size={3}>
-              <FormControl fullWidth>
-                <InputLabel>City</InputLabel>
-                <Select variant="outlined">
-                  <MenuItem value="labas">krabas</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid size="auto">
-              <CheckboxSecondary label="Show active" />
-            </Grid>
-            <Grid size="auto">
-              <Button color="secondary" variant="contained">
-                FILTER
-              </Button>
-            </Grid>
-          </Grid>
+          <Filters />
         </Container>
       </Box>
       <Container sx={{ mt: -4 }}>

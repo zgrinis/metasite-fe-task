@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryFunction, useQuery } from "@tanstack/react-query";
 import axios from "../axios";
 import { queryClient } from "../App";
 
@@ -15,7 +15,7 @@ export function useContactListQuery() {
   });
 }
 
-const getContact = async ({ queryKey }) => {
+const getContact: QueryFunction<Contact> = async ({ queryKey }) => {
   const contactId = queryKey[1];
   const { data } = await axios.get<Contact>(`/contacts/${contactId}`);
   return data;
