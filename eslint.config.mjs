@@ -4,6 +4,7 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
@@ -26,5 +27,6 @@ export default defineConfig([
     },
   },
   eslintConfigPrettier,
+  pluginQuery.configs.recommended,
   globalIgnores(["dist", "node_modules"]),
 ]);

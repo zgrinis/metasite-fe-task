@@ -4,7 +4,7 @@ import {
   GridColDef,
   GridColumnVisibilityModel,
   GridMenuIcon,
-  GridRowsProp,
+  GridRowParams,
 } from "@mui/x-data-grid";
 import {
   IconButton,
@@ -15,35 +15,9 @@ import {
 } from "@mui/material";
 
 import { Visibility } from "@mui/icons-material";
+import { useContactListQuery } from "../../queries/contacts";
 
-const rows: GridRowsProp = [
-  {
-    id: 1,
-    name: "name",
-    city: "city",
-    isActive: false,
-    email: "email",
-    phone: "phone",
-  },
-  {
-    id: 2,
-    name: "name",
-    city: "city",
-    isActive: true,
-    email: "email",
-    phone: "phone",
-  },
-  {
-    id: 3,
-    name: "name",
-    city: "city",
-    isActive: true,
-    email: "email",
-    phone: "phone",
-  },
-];
-
-const columns: GridColDef[] = [
+const columns: GridColDef<Contact>[] = [
   { field: "name", headerName: "Name", width: 150 },
   { field: "city", headerName: "City", width: 150 },
   {
@@ -61,9 +35,22 @@ const columns: GridColDef[] = [
     width: 150,
   },
   { field: "phone", headerName: "Phone", width: 150 },
+  { field: "surname", headerName: "Surname" },
 ];
 
 export default function DataGridContacts() {
+  const { data, isLoading } = useContactListQuery();
+
+  if (isLoading) return <>Loading ...</>;
+
+  return <DataGridComponent rows={data as Contacts} />;
+}
+
+type DataGridComponentProps = {
+  rows: Contacts;
+};
+
+function DataGridComponent({ rows }: DataGridComponentProps) {
   const [columnVisibilityModel, setColumnVisibilityModel] =
     React.useState<GridColumnVisibilityModel>(
       columns.reduce((agr, col) => ({ ...agr, [col.field]: true }), {}),
@@ -82,11 +69,10 @@ export default function DataGridContacts() {
     console.log(columnVisibilityModel);
     setColumnVisibilityModel((prev) => ({
       ...prev,
-      [field]: !prev[field], // Toggle visibility
+      [field]: !prev[field],
     }));
   };
 
-  // Custom column header with dropdown
   const columnVisibilityColumn: GridColDef = {
     field: "columnVisibility",
     headerName: "",
@@ -130,6 +116,9 @@ export default function DataGridContacts() {
       columns={[...columns, columnVisibilityColumn]}
       columnVisibilityModel={columnVisibilityModel}
       onColumnVisibilityModelChange={setColumnVisibilityModel}
+      onRowClick={({ id }: GridRowParams<Contact>) => {
+        console.log(id);
+      }}
       hideFooter
     />
   );
