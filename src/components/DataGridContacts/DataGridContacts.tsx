@@ -15,7 +15,8 @@ import {
 } from "@mui/material";
 
 import { Visibility } from "@mui/icons-material";
-import { useContactListQuery } from "../../queries/contacts";
+import { useContactListQuery, useContactQuery } from "../../queries/contacts";
+import { useContactContext } from "../../contexts/contact";
 
 const columns: GridColDef<Contact>[] = [
   { field: "name", headerName: "Name", width: 150 },
@@ -51,6 +52,7 @@ type DataGridComponentProps = {
 };
 
 function DataGridComponent({ rows }: DataGridComponentProps) {
+  const { setContactId } = useContactContext();
   const [columnVisibilityModel, setColumnVisibilityModel] =
     React.useState<GridColumnVisibilityModel>(
       columns.reduce((agr, col) => ({ ...agr, [col.field]: true }), {}),
@@ -117,7 +119,7 @@ function DataGridComponent({ rows }: DataGridComponentProps) {
       columnVisibilityModel={columnVisibilityModel}
       onColumnVisibilityModelChange={setColumnVisibilityModel}
       onRowClick={({ id }: GridRowParams<Contact>) => {
-        console.log(id);
+        setContactId(id as Contact["id"]);
       }}
       hideFooter
     />
