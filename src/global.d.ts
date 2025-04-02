@@ -9,3 +9,7 @@ type Contact = {
 };
 
 type Contacts = Contact[];
+
+type ContactFilterName = keyof Contact;
+
+type ContactFilterValues = Record<ContactFilterName, string | boolean>;

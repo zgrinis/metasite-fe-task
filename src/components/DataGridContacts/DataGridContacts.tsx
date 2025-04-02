@@ -1,9 +1,9 @@
-import * as React from "react";
 import {
   DataGrid,
   GridColDef,
   GridColumnVisibilityModel,
   GridMenuIcon,
+  GridPinnedColumnFields,
   GridRowParams,
 } from "@mui/x-data-grid";
 import {
@@ -15,8 +15,9 @@ import {
 } from "@mui/material";
 
 import { Visibility } from "@mui/icons-material";
-import { useContactListQuery, useContactQuery } from "../../queries/contacts";
+import { useContactListQuery } from "../../queries/contacts";
 import { useContactContext } from "../../contexts/contact";
+import { useState } from "react";
 
 const columns: GridColDef<Contact>[] = [
   { field: "name", headerName: "Name", width: 150 },
@@ -39,25 +40,18 @@ const columns: GridColDef<Contact>[] = [
   { field: "surname", headerName: "Surname" },
 ];
 
-export default function DataGridContacts() {
-  const { data, isLoading } = useContactListQuery();
-
-  if (isLoading) return <>Loading ...</>;
-
-  return <DataGridComponent rows={data as Contacts} />;
-}
-
 type DataGridComponentProps = {
   rows: Contacts;
 };
 
-function DataGridComponent({ rows }: DataGridComponentProps) {
+export default function DataGridContacts({ rows }: DataGridComponentProps) {
   const { setContactId } = useContactContext();
+
   const [columnVisibilityModel, setColumnVisibilityModel] =
-    React.useState<GridColumnVisibilityModel>(
+    useState<GridColumnVisibilityModel>(
       columns.reduce((agr, col) => ({ ...agr, [col.field]: true }), {}),
     );
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
