@@ -34,20 +34,40 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} alignItems={"center"}>
         <Grid size={3}>
           <TextField
             value={filterValues?.name || ""}
             onChange={(ev) => {
               handleOnChangeFilter("name", ev.target.value);
             }}
+            color="light"
             fullWidth
             variant="outlined"
             label="Name"
+            focused
+            sx={{
+              "& input": {
+                color: "#fff",
+              },
+            }}
           />
         </Grid>
         <Grid size={3}>
-          <FormControl fullWidth>
+          <FormControl
+            color="light"
+            focused
+            fullWidth
+            sx={{
+              ".MuiSelect-select, .MuiSvgIcon-root": {
+                color: "#fff",
+              },
+              ".MuiFormLabel-root": {
+                bgcolor: "primary.main",
+                px: 1,
+              },
+            }}
+          >
             <InputLabel>City</InputLabel>
             <Select
               value={filterValues?.city || ""}
@@ -96,9 +116,5 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
       }
       return copy;
     });
-    // setFilters(prev=>({
-    //     ...prev,
-    //     [name]:value
-    // }))
   }
 }

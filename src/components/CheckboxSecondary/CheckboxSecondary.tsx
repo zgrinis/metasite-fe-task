@@ -18,9 +18,20 @@ export default function CheckboxSecondary({
   return (
     <FormGroup>
       <FormControlLabel
-        control={<Checkbox color="secondary" {...props} />}
+        control={
+          <Checkbox
+            color="secondary"
+            {...props}
+            sx={{
+              color: "white",
+              "&.Mui-checked": {
+                color: "secondary",
+              },
+            }}
+          />
+        }
         label={
-          <Grid container gap={"1rem"}>
+          <Grid container sx={{ color: "white" }} gap={"1rem"}>
             Show active
             <VisibilityIcon />
           </Grid>

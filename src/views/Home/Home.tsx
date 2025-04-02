@@ -1,18 +1,10 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Grid,
-  Skeleton,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import DataGridContacts from "../../components/DataGridContacts/DataGridContacts";
 import { useContactContext } from "../../contexts/contact";
 import Filters from "../../components/FIlters/Filters";
 import { useMemo, useState } from "react";
 import { useContactListQuery } from "../../queries/contacts";
+import ContactCard from "../../components/ContactCard/ContactCard";
 
 export function Home() {
   const { contact, contactId, isContactLoading } = useContactContext();
@@ -74,48 +66,7 @@ export function Home() {
           {contactId && (
             <>
               <Grid size={4}>
-                <Card>
-                  {isContactLoading ? (
-                    <>
-                      <Skeleton
-                        sx={{ height: 190 }}
-                        animation="wave"
-                        variant="rectangular"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <CardMedia
-                        component="img"
-                        src={"/images/userpic.png"}
-                        alt="Anthony H."
-                      />
-                    </>
-                  )}
-                  <CardContent
-                    sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-                  >
-                    {isContactLoading ? (
-                      <>
-                        <Box sx={{ width: 300 }}>
-                          <Skeleton />
-                          <Skeleton animation="wave" />
-                          <Skeleton animation={false} />
-                        </Box>
-                      </>
-                    ) : (
-                      <>
-                        <Typography variant="h5" textAlign={"center"}>
-                          {contact?.name}
-                        </Typography>
-                        <Grid container>
-                          <Grid size={6}>Name:</Grid>
-                          <Grid size={6}>{contact?.name}</Grid>
-                        </Grid>
-                      </>
-                    )}
-                  </CardContent>
-                </Card>
+                <ContactCard {...{ isContactLoading, contact }} />
               </Grid>
             </>
           )}

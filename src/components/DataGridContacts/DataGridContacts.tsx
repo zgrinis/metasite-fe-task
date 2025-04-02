@@ -3,7 +3,6 @@ import {
   GridColDef,
   GridColumnVisibilityModel,
   GridMenuIcon,
-  GridPinnedColumnFields,
   GridRowParams,
 } from "@mui/x-data-grid";
 import {
@@ -12,20 +11,23 @@ import {
   MenuItem,
   Checkbox,
   ListItemText,
+  Card,
 } from "@mui/material";
 
 import { Visibility } from "@mui/icons-material";
-import { useContactListQuery } from "../../queries/contacts";
 import { useContactContext } from "../../contexts/contact";
 import { useState } from "react";
 
 const columns: GridColDef<Contact>[] = [
-  { field: "name", headerName: "Name", width: 150 },
-  { field: "city", headerName: "City", width: 150 },
+  { field: "name", headerName: "Name", flex: 1 },
+  { field: "city", headerName: "City", flex: 1 },
   {
     field: "isActive",
     headerName: "Is active",
-    width: 30,
+    flex: 0,
+    width: 60,
+    align: "center",
+    headerAlign: "center",
     renderHeader: () => <Visibility />,
     renderCell: ({ value }) => (value ? <Visibility color="disabled" /> : null),
   },
@@ -34,10 +36,9 @@ const columns: GridColDef<Contact>[] = [
     headerName: "Email",
     align: "right",
     headerAlign: "right",
-    width: 150,
+    flex: 1,
   },
-  { field: "phone", headerName: "Phone", width: 150 },
-  { field: "surname", headerName: "Surname" },
+  { field: "phone", headerName: "Phone", flex: 1 },
 ];
 
 type DataGridComponentProps = {
@@ -62,7 +63,6 @@ export default function DataGridContacts({ rows }: DataGridComponentProps) {
   };
 
   const handleToggleColumn = (field: string) => {
-    console.log(columnVisibilityModel);
     setColumnVisibilityModel((prev) => ({
       ...prev,
       [field]: !prev[field],
@@ -73,20 +73,24 @@ export default function DataGridContacts({ rows }: DataGridComponentProps) {
     field: "columnVisibility",
     headerName: "",
     width: 50,
+    headerClassName: !!anchorEl ? "open" : undefined,
     disableColumnMenu: true,
     sortable: false,
     renderHeader: () => (
       <>
         <IconButton size="small" onClick={handleOpenMenu}>
-          <GridMenuIcon />
+          <GridMenuIcon className="dropdown-toggle" />
         </IconButton>
         <Menu
           anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
+          open={!!anchorEl}
           onClose={handleCloseMenu}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
           {columns.map((col) => {
-            if (col.field == "columnVisibility") return null;
+            if (["columnVisibility", "isActive"].includes(col.field))
+              return null;
             return (
               <MenuItem
                 key={col.field}
@@ -106,16 +110,37 @@ export default function DataGridContacts({ rows }: DataGridComponentProps) {
     ),
   };
 
+  const handleRowClick = ({ id }: GridRowParams<Contact>) => {
+    setContactId(id as Contact["id"]);
+  };
   return (
-    <DataGrid
-      rows={rows}
-      columns={[...columns, columnVisibilityColumn]}
-      columnVisibilityModel={columnVisibilityModel}
-      onColumnVisibilityModelChange={setColumnVisibilityModel}
-      onRowClick={({ id }: GridRowParams<Contact>) => {
-        setContactId(id as Contact["id"]);
-      }}
-      hideFooter
-    />
+    <Card>
+      <DataGrid
+        rows={rows}
+        columns={[...columns, columnVisibilityColumn]}
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={setColumnVisibilityModel}
+        onRowClick={handleRowClick}
+        hideFooter
+        sx={{
+          ".MuiDataGrid-columnHeader": {
+            bgcolor: "primary.light",
+            color: "white",
+            "&.open": {
+              bgcolor: "white",
+            },
+            "&.open svg.MuiSvgIcon-root": {
+              color: (theme) => theme.palette.primary.main,
+            },
+          },
+          ".MuiDataGrid-columnHeader svg": {
+            color: "white",
+          },
+          "&.MuiDataGrid-root": {
+            border: "none",
+          },
+        }}
+      />
+    </Card>
   );
 }
