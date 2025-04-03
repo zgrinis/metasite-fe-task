@@ -8,11 +8,12 @@ export const columns: GridColDef<Contact>[] = [
     field: "isActive",
     headerName: "Is active",
     flex: 0,
-    width: 60,
+    width: 65,
     align: "center",
     headerAlign: "center",
     renderHeader: () => <Visibility />,
-    renderCell: ({ value }) => (value ? <Visibility color="disabled" /> : null),
+    renderCell: ({ value }) =>
+      value ? <Visibility sx={{ color: "#747474" }} /> : null,
   },
   {
     field: "email",
