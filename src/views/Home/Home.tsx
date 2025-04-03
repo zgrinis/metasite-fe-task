@@ -1,37 +1,15 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import DataGridContacts from "../../components/DataGridContacts/DataGridContacts";
 import { useContactContext } from "../../contexts/contact";
-import Filters from "../../components/FIlters/Filters";
-import { useMemo, useState } from "react";
-import { useContactListQuery } from "../../queries/contacts";
+import Filters from "../../components/Filters/Filters";
+import { useState } from "react";
 import ContactCard from "../../components/ContactCard/ContactCard";
+import { useFilteredRows } from "./hooks";
 
 export function Home() {
   const { contact, contactId, isContactLoading } = useContactContext();
   const [filters, setFilters] = useState({} as ContactFilterValues);
-  const { data: fetchedRows, isLoading: isRowsLoading } = useContactListQuery();
-
-  const rows = useMemo(() => {
-    if (!fetchedRows || isRowsLoading) return [];
-    const filterNames = Object.keys(filters) as ContactFilterName[];
-    if (!filterNames.length) return fetchedRows;
-    const filtered = fetchedRows.filter((row) =>
-      filterNames.every((filterName) => {
-        const rowValue = row[filterName];
-        const filterValue = filters[filterName];
-
-        if (typeof filterValue === "string") {
-          return (rowValue as string)
-            .toUpperCase()
-            .startsWith((filterValue as string).toUpperCase());
-        }
-
-        return rowValue === filterValue;
-      }),
-    );
-
-    return filtered;
-  }, [fetchedRows, isRowsLoading, filters]);
+  const { rows, isRowsLoading } = useFilteredRows({ filters });
 
   return (
     <>

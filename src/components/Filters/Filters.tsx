@@ -8,27 +8,20 @@ import {
   Button,
 } from "@mui/material";
 import CheckboxSecondary from "../CheckboxSecondary/CheckboxSecondary";
-import { useContactListQuery } from "../../queries/contacts";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
+import { useCitySelectOptions } from "./hooks";
 
 type FiltersProps = {
-  filters: ContactFilterValues;
   setFilters: React.Dispatch<React.SetStateAction<ContactFilterValues>>;
 };
 
-export default function Filters({ filters, setFilters }: FiltersProps) {
-  const { data, isFetching } = useContactListQuery();
+export default function Filters({ setFilters }: FiltersProps) {
   const [filterValues, setFilterValues] = useState({} as ContactFilterValues);
 
-  const options = useMemo(() => {
-    if (isFetching || !data) return [];
-
-    return Array.from(new Set(data.map((contact) => contact.city)));
-  }, [data, isFetching]);
+  const options = useCitySelectOptions();
 
   function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
-    console.log(filterValues);
     setFilters(filterValues);
   }
 
@@ -46,28 +39,11 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
             variant="outlined"
             label="Name"
             focused
-            sx={{
-              "& input": {
-                color: "#fff",
-              },
-            }}
+            sx={nameStyle}
           />
         </Grid>
         <Grid size={3}>
-          <FormControl
-            color="light"
-            focused
-            fullWidth
-            sx={{
-              ".MuiSelect-select, .MuiSvgIcon-root": {
-                color: "#fff",
-              },
-              ".MuiFormLabel-root": {
-                bgcolor: "primary.main",
-                px: 1,
-              },
-            }}
-          >
+          <FormControl color="light" focused fullWidth sx={selectStyle}>
             <InputLabel>City</InputLabel>
             <Select
               value={filterValues?.city || ""}
@@ -118,3 +94,19 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
     });
   }
 }
+
+const nameStyle = {
+  "& input": {
+    color: "#fff",
+  },
+};
+
+const selectStyle = {
+  ".MuiSelect-select, .MuiSvgIcon-root": {
+    color: "#fff",
+  },
+  ".MuiFormLabel-root": {
+    bgcolor: "primary.main",
+    px: 1,
+  },
+};

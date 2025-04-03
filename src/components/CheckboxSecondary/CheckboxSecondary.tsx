@@ -18,20 +18,9 @@ export default function CheckboxSecondary({
   return (
     <FormGroup>
       <FormControlLabel
-        control={
-          <Checkbox
-            color="secondary"
-            {...props}
-            sx={{
-              color: "white",
-              "&.Mui-checked": {
-                color: "secondary",
-              },
-            }}
-          />
-        }
+        control={<Checkbox color="secondary" {...props} sx={checkboxStyle} />}
         label={
-          <Grid container sx={{ color: "white" }} gap={"1rem"}>
+          <Grid container sx={textWhite} gap={"1rem"}>
             Show active
             <VisibilityIcon />
           </Grid>
@@ -40,3 +29,12 @@ export default function CheckboxSecondary({
     </FormGroup>
   );
 }
+
+const textWhite = { color: "white" };
+
+const checkboxStyle = {
+  color: "white",
+  "&.Mui-checked": {
+    color: "secondary",
+  },
+};
