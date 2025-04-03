@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Container, Typography } from "@mui/material";
 import { ErrorBoundary } from "react-error-boundary";
 import { Outlet } from "react-router";
 
