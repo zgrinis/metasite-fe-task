@@ -7,25 +7,13 @@ import ContactCard from "../../components/ContactCard/ContactCard";
 import { useFilteredRows } from "./hooks";
 import LoadingBoundary from "../../components/LoadingBoundary/LoadingBoundary";
 
-export function Home() {
+export default function Home() {
   const { contact, contactId, isContactLoading } = useContactContext();
   const [filters, setFilters] = useState({} as ContactFilterValues);
   const { rows, isRowsLoading } = useFilteredRows({ filters });
 
   return (
     <>
-      <Box bgcolor="primary.dark" py={2}>
-        <Container>
-          <Typography
-            variant="h4"
-            color="white"
-            fontWeight={700}
-            component="h1"
-          >
-            CONTACTIFY
-          </Typography>
-        </Container>
-      </Box>
       <Box bgcolor="primary.main" pt={6} pb={10}>
         <Container>
           <Filters {...{ filters, setFilters }} />
